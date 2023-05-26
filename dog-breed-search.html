@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dog Breed Information</title>
+  <form action="website-dog-breed-db.php" method="post">
+    <input type="submit" value="Connect to database">
+  </form>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      // Handle search form submission
+      $('#search-form').submit(function(event) {
+        event.preventDefault();
+        var query = $('#breed-search').val();
+        $.ajax({
+          url: 'https://api.thedogapi.com/v1/breeds/search?q=' + query,
+          type: 'GET',
+          dataType: 'json',
+          success: function(data) {
+            // Clear previous search results
+            $('#breed-list').empty();
+            // Display search results
+            $.each(data, function(index, breed) {
+              $('#breed-list').append('<li><strong>' + breed.name + '</strong><br>' + breed.temperament + '</strong><br>' + breed.life_span + '</strong><br>' + breed.id, '</li>');
+            });
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+            alert('Error: ' + textStatus);
+          }
+        });
+      });
+
+      // Handle upload form submission
+      $('#upload-form').submit(function(event) {
+        event.preventDefault();
+        var name = $('#breed-name').val();
+        var breed,ID = $('#breed-ID').val();
+        var temperament = $('#breed-temperament').val();
+        var life,Span = $('#breed-lifespan').val();
+        var body = {
+          name: name,
+          temperament: temperament
+        };
+        $.ajax({
+          url: 'https://api.thedogapi.com/v1/breeds',
+          type: 'POST',
+          data: body,
+          dataType: 'json',
+          headers: {
+            'x-api-key': 'live_TeJ3cCcumMSIJtEu5cevjpdmVPmfsMd7842kyOjhuSQm5IqA06K4DkCn7qC83XGi'
+          },
+          success: function(data) {
+            alert('Breed uploaded successfully!');
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+            alert('Error: ' + textStatus);
+          }
+        });
+      });
+    });
+  </script>
+</head>
+<body>
+  <h1>Dog Breed Information</h1>
+  <h2>Search for a breed:</h2>
+  <form id="search-form">
+    <label for="breed-search">Breed Name:</label>
+    <input type="text" id="breed-search" name="breed-search">
+    <button type="submit">Search</button>
+  </form>
+  <hr>
+  <h2>Search Results:</h2>
+  <ul id="breed-list">
+    <!-- This is where the search results will be displayed -->
+  </ul>
+  <hr>
+  <h2>Upload a new breed:</h2>
+  <form id="upload-form">
+    <label for="breed-name">Breed Name:</label>
+    <input type="text" id="breed-name" name="breed-name"><br>
+    <label for="breed-ID">Breed ID:</label>
+    <input type="text" id="breed-ID" name="breed-ID"><br>
+    <label for="breed-temperament">Temperament:</label>
+    <input type="text" id="breed-temperament" name="breed-temperament"><br>
+    <label for="breed-lifespan">Life Span:</label>
+    <input type="text" id="breed-lifespan" name="breed-lifespan"><br>
+    <button type="submit">Upload</button>
+  </form>
+</body>
+</html>

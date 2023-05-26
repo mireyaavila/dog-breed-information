@@ -1,0 +1,1 @@
+<?php $dbconn = pg_connect("host=contenedor-db port=5432 dbname=midbdogbreed user=postgres password=Bubblegum24*");?>
